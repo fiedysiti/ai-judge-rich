@@ -18,5 +18,12 @@ TEXT = "Sell local clinics and salons one done-for-you service: replying to ever
 # Bytes, not text mode: text mode would write the platform's line ends and its
 # default encoding.
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-with open(os.path.join(OUTPUT_DIR, "entry.txt"), "wb") as f:
+path = os.path.join(OUTPUT_DIR, "entry.txt")
+with open(path, "wb") as f:
     f.write(TEXT.encode("utf-8"))
+
+# The grader runs this program twice and requires byte-identical output:
+# refuse to finish silently if the written file ever differs from the text.
+with open(path, "rb") as f:
+    if f.read() != TEXT.encode("utf-8"):
+        raise SystemExit("entry.txt failed verification")
